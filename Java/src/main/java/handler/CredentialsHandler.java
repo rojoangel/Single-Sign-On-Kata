@@ -21,18 +21,25 @@ public class CredentialsHandler implements Service{
 
     @Override
     public Response handleRequest(Request request) {
-        if (request.getCredentials() != null) {
-            Credentials credentials = request.getCredentials();
-            if (!this.gateway.credentialsAreValid(credentials.getUsername(), credentials.getPassword())) {
-                return new Response("Invalid credentials provided");
-            } else {
-                SSOToken token = this.registry.register_new_session(
-                        credentials.getUsername(),
-                        credentials.getPassword()
-                );
-                this.service.handleRequest(new Request(request.getName(), token));
-            }
+        if (request.getSSOToken() != null) {
+            this.service.handleRequest(request);
         }
-        return new Response("No credentials provided, please log in the application");
+
+        if (request.getCredentials() == null) {
+            return new Response("No credentials provided, please log in the application");
+        }
+
+        Credentials credentials = request.getCredentials();
+        if (!this.gateway.credentialsAreValid(credentials.getUsername(), credentials.getPassword())) {
+            return new Response("Invalid credentials provided");
+        }
+
+        return this.service.handleRequest(
+                new Request(
+                        request.getName(),
+                        this.registry.register_new_session(
+                                credentials.getUsername(),
+                                credentials.getPassword()
+        )));
     }
 }

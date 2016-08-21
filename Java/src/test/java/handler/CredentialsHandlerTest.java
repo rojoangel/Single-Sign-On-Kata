@@ -86,4 +86,22 @@ public class CredentialsHandlerTest {
         assertEquals("No credentials provided, please log in the application", response.getText());
         context.assertIsSatisfied();
     }
+
+    @Test
+    public void whenTokenIsPresentDelegatesToService() throws Exception {
+
+        Request request = new Request("World", new SSOToken());
+
+        context.checking(new Expectations() {{
+            never(gateway);
+            never(registry);
+
+            oneOf(service).handleRequest(request);
+        }});
+
+        CredentialsHandler handler = new CredentialsHandler(service, gateway, registry);
+        handler.handleRequest(request);
+
+        context.assertIsSatisfied();
+    }
 }
