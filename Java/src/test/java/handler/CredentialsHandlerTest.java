@@ -11,10 +11,11 @@ import sso.Response;
 import static org.junit.Assert.assertEquals;
 
 public class CredentialsHandlerTest {
+
     @Test
     public void invalidCredentialsAreRejected() throws Exception {
-        String username = "user";
-        String password = "pwd";
+        String username = "invalidUserName";
+        String password = "invalidPassword";
         Request request = new Request("World", null);
         request.setCredentials(username, password);
 
