@@ -29,4 +29,23 @@ public class MyServiceTest {
         context.assertIsSatisfied();
         assertNotEquals("hello Foo!", response.getText());
     }
+
+    @Test
+    public void nullSSOTokenIsRejected() {
+        Mockery context = new Mockery();
+        SingleSignOnRegistry ssoRegistry = context.mock(SingleSignOnRegistry.class);
+        AuthenticationGateway authenticationGateway = context.mock(AuthenticationGateway.class);
+        context.checking(new Expectations() {{
+            ignoring(authenticationGateway);
+
+            oneOf(ssoRegistry).is_valid(null);
+            will(returnValue(false));
+        }});
+
+        MyService service = new MyService(ssoRegistry, authenticationGateway);
+        Response response = service.handleRequest(new Request("Foo", null));
+
+        context.assertIsSatisfied();
+        assertNotEquals("hello Foo!", response.getText());
+    }
 }
