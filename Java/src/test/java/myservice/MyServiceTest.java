@@ -4,18 +4,27 @@ import static org.junit.Assert.*;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Before;
 import org.junit.Test;
 
 import sso.*;
 
 public class MyServiceTest {
 
+    private Mockery context;
+    private SingleSignOnRegistry ssoRegistry;
+    private AuthenticationGateway authenticationGateway;
+
+    @Before
+    public void setUp() throws Exception {
+        context = new Mockery();
+        ssoRegistry = context.mock(SingleSignOnRegistry.class);
+        authenticationGateway = context.mock(AuthenticationGateway.class);
+    }
+
     @Test
     public void invalidSSOTokenIsRejected() {
         SSOToken token = new SSOToken();
-        Mockery context = new Mockery();
-        SingleSignOnRegistry ssoRegistry = context.mock(SingleSignOnRegistry.class);
-        AuthenticationGateway authenticationGateway = context.mock(AuthenticationGateway.class);
         context.checking(new Expectations() {{
             ignoring(authenticationGateway);
 
@@ -32,9 +41,6 @@ public class MyServiceTest {
 
     @Test
     public void nullSSOTokenIsRejected() {
-        Mockery context = new Mockery();
-        SingleSignOnRegistry ssoRegistry = context.mock(SingleSignOnRegistry.class);
-        AuthenticationGateway authenticationGateway = context.mock(AuthenticationGateway.class);
         context.checking(new Expectations() {{
             ignoring(authenticationGateway);
 
@@ -52,9 +58,6 @@ public class MyServiceTest {
     @Test
     public void validSSOTokenIsAccepted() {
         SSOToken token = new SSOToken();
-        Mockery context = new Mockery();
-        SingleSignOnRegistry ssoRegistry = context.mock(SingleSignOnRegistry.class);
-        AuthenticationGateway authenticationGateway = context.mock(AuthenticationGateway.class);
         context.checking(new Expectations() {{
             ignoring(authenticationGateway);
 
