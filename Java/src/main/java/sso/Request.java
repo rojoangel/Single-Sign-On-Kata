@@ -26,4 +26,25 @@ public class Request {
     public Credentials getCredentials() {
         return this.credentials;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (name != null ? !name.equals(request.name) : request.name != null) return false;
+        if (token != null ? !token.equals(request.token) : request.token != null) return false;
+        return credentials != null ? credentials.equals(request.credentials) : request.credentials == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (token != null ? token.hashCode() : 0);
+        result = 31 * result + (credentials != null ? credentials.hashCode() : 0);
+        return result;
+    }
 }
