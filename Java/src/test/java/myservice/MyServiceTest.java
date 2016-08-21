@@ -48,4 +48,24 @@ public class MyServiceTest {
         context.assertIsSatisfied();
         assertNotEquals("hello Foo!", response.getText());
     }
+
+    @Test
+    public void validSSOTokenIsAccepted() {
+        SSOToken token = new SSOToken();
+        Mockery context = new Mockery();
+        SingleSignOnRegistry ssoRegistry = context.mock(SingleSignOnRegistry.class);
+        AuthenticationGateway authenticationGateway = context.mock(AuthenticationGateway.class);
+        context.checking(new Expectations() {{
+            ignoring(authenticationGateway);
+
+            oneOf(ssoRegistry).is_valid(token);
+            will(returnValue(true));
+        }});
+
+        MyService service = new MyService(ssoRegistry, authenticationGateway);
+        Response response = service.handleRequest(new Request("Foo", token));
+
+        context.assertIsSatisfied();
+        assertEquals("hello Foo!", response.getText());
+    }
 }
