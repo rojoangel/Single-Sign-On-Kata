@@ -33,7 +33,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        Service service = new MyService(ssoRegistry, authenticationGateway);
+        Service service = MyServiceFactory.fromRegistryAndGateway(ssoRegistry, authenticationGateway);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
@@ -49,7 +49,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        Service service = new MyService(ssoRegistry, authenticationGateway);
+        Service service = MyServiceFactory.fromRegistryAndGateway(ssoRegistry, authenticationGateway);
         Response response = service.handleRequest(new Request("Foo", null));
 
         context.assertIsSatisfied();
@@ -66,10 +66,11 @@ public class MyServiceTest {
             will(returnValue(true));
         }});
 
-        Service service = new MyService(ssoRegistry, authenticationGateway);
+        Service service = MyServiceFactory.fromRegistryAndGateway(ssoRegistry, authenticationGateway);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
         assertEquals("hello Foo!", response.getText());
     }
+
 }
