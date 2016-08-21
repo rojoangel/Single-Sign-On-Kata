@@ -2,6 +2,7 @@ package handler;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Before;
 import org.junit.Test;
 import service.Service;
 import sso.Request;
@@ -13,13 +14,21 @@ import static org.junit.Assert.*;
 
 public class SSOTokenHandlerTest {
 
+    private Mockery context;
+    private Service service;
+    private SingleSignOnRegistry registry;
+
+    @Before
+    public void setUp() throws Exception {
+        context = new Mockery();
+        service = context.mock(Service.class);
+        registry = context.mock(SingleSignOnRegistry.class);
+    }
+
     @Test
     public void invalidSSOTokenIsRejected() throws Exception {
         SSOToken token = new SSOToken();
-
-        Mockery context = new Mockery();
-        Service service = context.mock(Service.class);
-        SingleSignOnRegistry registry = context.mock(SingleSignOnRegistry.class);
+        Request request = new Request("World", token);
 
         context.checking(new Expectations() {{
             never(service);
@@ -29,7 +38,7 @@ public class SSOTokenHandlerTest {
         }});
 
         SSOTokenHandler handler = new SSOTokenHandler(service, registry);
-        Response response = handler.handleRequest(new Request("World", token));
+        Response response = handler.handleRequest(request);
 
         context.assertIsSatisfied();
         assertNotEquals("hello Foo!", response.getText());
@@ -39,10 +48,6 @@ public class SSOTokenHandlerTest {
     public void validSSOTokenIsAccepted() throws Exception {
         SSOToken token = new SSOToken();
         Request request = new Request("World", token);
-
-        Mockery context = new Mockery();
-        Service service = context.mock(Service.class);
-        SingleSignOnRegistry registry = context.mock(SingleSignOnRegistry.class);
 
         context.checking(new Expectations() {{
             oneOf(service).handleRequest(request);
