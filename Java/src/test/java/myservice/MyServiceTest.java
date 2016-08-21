@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import service.Service;
+import service.ServiceFactory;
 import sso.*;
 
 public class MyServiceTest {
@@ -33,7 +34,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        Service service = MyServiceFactory.fromRegistryAndGateway(ssoRegistry, authenticationGateway);
+        Service service = ServiceFactory.handlingSSOToken(ssoRegistry);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
@@ -49,7 +50,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        Service service = MyServiceFactory.fromRegistryAndGateway(ssoRegistry, authenticationGateway);
+        Service service = ServiceFactory.handlingSSOToken(ssoRegistry);
         Response response = service.handleRequest(new Request("Foo", null));
 
         context.assertIsSatisfied();
@@ -66,7 +67,7 @@ public class MyServiceTest {
             will(returnValue(true));
         }});
 
-        Service service = MyServiceFactory.fromRegistryAndGateway(ssoRegistry, authenticationGateway);
+        Service service = ServiceFactory.handlingSSOToken(ssoRegistry);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
