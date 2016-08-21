@@ -11,12 +11,8 @@ public class MyService implements Service {
     private AuthenticationGateway authenticationGateway;
     private SingleSignOnRegistry registry;
     
-    public MyService(SingleSignOnRegistry registry) {
-        this.registry = registry;
-    }
-
     public MyService(SingleSignOnRegistry ssoRegistry, AuthenticationGateway authenticationGateway) {
-        this(ssoRegistry);
+        this.registry = ssoRegistry;
         this.authenticationGateway = authenticationGateway;
     }
 
