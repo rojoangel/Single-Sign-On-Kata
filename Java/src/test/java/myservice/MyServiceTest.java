@@ -7,6 +7,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import service.Service;
 import sso.*;
 
 public class MyServiceTest {
@@ -32,7 +33,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        MyService service = new MyService(ssoRegistry, authenticationGateway);
+        Service service = new MyService(ssoRegistry, authenticationGateway);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
@@ -48,7 +49,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        MyService service = new MyService(ssoRegistry, authenticationGateway);
+        Service service = new MyService(ssoRegistry, authenticationGateway);
         Response response = service.handleRequest(new Request("Foo", null));
 
         context.assertIsSatisfied();
@@ -65,7 +66,7 @@ public class MyServiceTest {
             will(returnValue(true));
         }});
 
-        MyService service = new MyService(ssoRegistry, authenticationGateway);
+        Service service = new MyService(ssoRegistry, authenticationGateway);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();

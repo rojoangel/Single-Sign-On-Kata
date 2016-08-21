@@ -1,11 +1,12 @@
 package myservice;
 
+import service.Service;
 import sso.AuthenticationGateway;
 import sso.Request;
 import sso.Response;
 import sso.SingleSignOnRegistry;
 
-public class MyService {
+public class MyService implements Service {
 
     private AuthenticationGateway authenticationGateway;
     private SingleSignOnRegistry registry;
@@ -19,6 +20,7 @@ public class MyService {
         this.authenticationGateway = authenticationGateway;
     }
 
+    @Override
     public Response handleRequest(Request request) {
         if (!registry.is_valid(request.getSSOToken())) {
             return new Response("Invalid Single Sign On Token Provided");
