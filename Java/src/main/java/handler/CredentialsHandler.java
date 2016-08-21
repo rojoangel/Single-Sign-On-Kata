@@ -33,6 +33,6 @@ public class CredentialsHandler implements Service{
                 this.service.handleRequest(new Request(request.getName(), token));
             }
         }
-        return new Response(null);
+        return new Response("No credentials provided, please log in the application");
     }
 }

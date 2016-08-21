@@ -69,4 +69,21 @@ public class CredentialsHandlerTest {
 
         context.assertIsSatisfied();
     }
+
+    @Test
+    public void nullCredentialsAndTokenAreRejected() throws Exception {
+        Request request = new Request("World", null);
+
+        context.checking(new Expectations() {{
+            never(gateway);
+            never(registry);
+            never(service);
+        }});
+
+        CredentialsHandler handler = new CredentialsHandler(service, gateway, registry);
+        Response response = handler.handleRequest(request);
+
+        assertEquals("No credentials provided, please log in the application", response.getText());
+        context.assertIsSatisfied();
+    }
 }
