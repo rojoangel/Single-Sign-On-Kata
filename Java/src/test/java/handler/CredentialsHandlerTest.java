@@ -2,6 +2,7 @@ package handler;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.junit.Before;
 import org.junit.Test;
 import service.Service;
 import sso.*;
@@ -9,6 +10,18 @@ import sso.*;
 import static org.junit.Assert.assertEquals;
 
 public class CredentialsHandlerTest {
+    private Mockery context;
+    private Service service;
+    private AuthenticationGateway gateway;
+    private SingleSignOnRegistry registry;
+
+    @Before
+    public void setUp() throws Exception {
+        context = new Mockery();
+        service = context.mock(Service.class);
+        gateway = context.mock(AuthenticationGateway.class);
+        registry = context.mock(SingleSignOnRegistry.class);
+    }
 
     @Test
     public void invalidCredentialsAreRejected() throws Exception {
@@ -17,10 +30,6 @@ public class CredentialsHandlerTest {
         Request request = new Request("World", null);
         request.setCredentials(username, password);
 
-        Mockery context = new Mockery();
-        Service service = context.mock(Service.class);
-        AuthenticationGateway gateway = context.mock(AuthenticationGateway.class);
-        SingleSignOnRegistry registry = context.mock(SingleSignOnRegistry.class);
         context.checking(new Expectations() {{
             never(service);
 
@@ -44,11 +53,6 @@ public class CredentialsHandlerTest {
         Request request = new Request("World", null);
         request.setCredentials(username, password);
         SSOToken token = new SSOToken();
-
-        Mockery context = new Mockery();
-        Service service = context.mock(Service.class);
-        AuthenticationGateway gateway = context.mock(AuthenticationGateway.class);
-        SingleSignOnRegistry registry = context.mock(SingleSignOnRegistry.class);
 
         context.checking(new Expectations() {{
             oneOf(gateway).credentialsAreValid(username, password);
