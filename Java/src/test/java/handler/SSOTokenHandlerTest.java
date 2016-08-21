@@ -41,7 +41,7 @@ public class SSOTokenHandlerTest {
         Response response = handler.handleRequest(request);
 
         context.assertIsSatisfied();
-        assertNotEquals("hello Foo!", response.getText());
+        assertEquals("Invalid Single Sign On Token Provided", response.getText());
     }
 
     @Test
