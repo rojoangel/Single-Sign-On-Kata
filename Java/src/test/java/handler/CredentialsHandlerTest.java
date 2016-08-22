@@ -10,17 +10,16 @@ import sso.*;
 import static org.junit.Assert.assertEquals;
 
 public class CredentialsHandlerTest {
+
     private Mockery context;
     private Service service;
     private AuthenticationGateway gateway;
-    private SingleSignOnRegistry registry;
 
     @Before
     public void setUp() throws Exception {
         context = new Mockery();
         service = context.mock(Service.class);
         gateway = context.mock(AuthenticationGateway.class);
-        registry = context.mock(SingleSignOnRegistry.class);
     }
 
     @Test
@@ -33,41 +32,15 @@ public class CredentialsHandlerTest {
         context.checking(new Expectations() {{
             never(service);
 
-            never(registry);
-
             oneOf(gateway).credentialsAreValid(username, password);
             will(returnValue(false));
         }});
 
-        CredentialsHandler handler = new CredentialsHandler(service, gateway, registry);
+        CredentialsHandler handler = new CredentialsHandler(service, gateway);
         Response response = handler.handleRequest(request);
 
         context.assertIsSatisfied();
         assertEquals("Invalid credentials provided", response.getText());
-    }
-
-    @Test
-    public void validCredentialsAreAccepted() throws Exception {
-        String username = "validUserName";
-        String password = "validPassword";
-        Request request = new Request("World", null);
-        request.setCredentials(username, password);
-        SSOToken token = new SSOToken();
-
-        context.checking(new Expectations() {{
-            oneOf(gateway).credentialsAreValid(username, password);
-            will(returnValue(true));
-
-            oneOf(registry).register_new_session(username, password);
-            will(returnValue(token));
-
-            oneOf(service).handleRequest(new Request("World", token));
-        }});
-
-        CredentialsHandler handler = new CredentialsHandler(service, gateway, registry);
-        handler.handleRequest(request);
-
-        context.assertIsSatisfied();
     }
 
     @Test
@@ -76,11 +49,10 @@ public class CredentialsHandlerTest {
 
         context.checking(new Expectations() {{
             never(gateway);
-            never(registry);
             never(service);
         }});
 
-        CredentialsHandler handler = new CredentialsHandler(service, gateway, registry);
+        CredentialsHandler handler = new CredentialsHandler(service, gateway);
         Response response = handler.handleRequest(request);
 
         assertEquals("No credentials provided, please log in the application", response.getText());
@@ -94,12 +66,11 @@ public class CredentialsHandlerTest {
 
         context.checking(new Expectations() {{
             never(gateway);
-            never(registry);
 
             oneOf(service).handleRequest(request);
         }});
 
-        CredentialsHandler handler = new CredentialsHandler(service, gateway, registry);
+        CredentialsHandler handler = new CredentialsHandler(service, gateway);
         handler.handleRequest(request);
 
         context.assertIsSatisfied();
