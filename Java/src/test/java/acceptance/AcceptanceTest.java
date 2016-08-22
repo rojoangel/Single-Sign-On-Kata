@@ -1,4 +1,4 @@
-package myservice;
+package acceptance;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import service.Service;
 import service.ServiceFactory;
 import sso.*;
 
-public class MyServiceTest {
+public class AcceptanceTest {
 
     private Mockery context;
     private SingleSignOnRegistry ssoRegistry;
