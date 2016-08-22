@@ -74,4 +74,27 @@ public class MyServiceTest {
         assertEquals("hello Foo!", response.getText());
     }
 
+    @Test
+    public void invalidCredentialsAreRejected() {
+
+        Request request = new Request("Foo", null);
+        String username = "invalidUserName";
+        String password = "invalidPassword";
+        request.setCredentials(username, password);
+
+        context.checking(new Expectations() {{
+            ignoring(ssoRegistry);
+
+            oneOf(authenticationGateway).credentialsAreValid(username, password);
+            will(returnValue(false));
+
+        }});
+
+        Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
+        Response response = service.handleRequest(request);
+
+        context.assertIsSatisfied();
+        assertNotEquals("hello Foo!", response.getText());
+    }
+
 }
