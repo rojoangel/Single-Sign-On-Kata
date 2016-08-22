@@ -19,7 +19,7 @@ public class CredentialsValidationHandler implements Service{
     @Override
     public Response handleRequest(Request request) {
         if (request.getSSOToken() != null) {
-            this.service.handleRequest(request);
+            return this.service.handleRequest(request);
         }
 
         if (request.getCredentials() == null) {

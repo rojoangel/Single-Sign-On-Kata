@@ -34,7 +34,7 @@ public class MyServiceTest {
             will(returnValue(false));
         }});
 
-        Service service = ServiceFactory.handlingSSOToken(ssoRegistry);
+        Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
@@ -45,12 +45,10 @@ public class MyServiceTest {
     public void nullSSOTokenIsRejected() {
         context.checking(new Expectations() {{
             never(authenticationGateway);
-
-            oneOf(ssoRegistry).is_valid(null);
-            will(returnValue(false));
+            never(ssoRegistry);
         }});
 
-        Service service = ServiceFactory.handlingSSOToken(ssoRegistry);
+        Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
         Response response = service.handleRequest(new Request("Foo", null));
 
         context.assertIsSatisfied();
@@ -67,7 +65,7 @@ public class MyServiceTest {
             will(returnValue(true));
         }});
 
-        Service service = ServiceFactory.handlingSSOToken(ssoRegistry);
+        Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
         Response response = service.handleRequest(new Request("Foo", token));
 
         context.assertIsSatisfied();
