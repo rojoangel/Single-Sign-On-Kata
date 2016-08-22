@@ -3,12 +3,12 @@ package handler;
 import service.Service;
 import sso.*;
 
-public class CredentialsHandler implements Service{
+public class CredentialsValidationHandler implements Service{
 
     private final Service service;
     private final AuthenticationGateway gateway;
 
-    public CredentialsHandler(
+    public CredentialsValidationHandler(
             Service service,
             AuthenticationGateway gateway
     ) {

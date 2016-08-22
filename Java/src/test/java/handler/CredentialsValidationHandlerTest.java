@@ -9,7 +9,7 @@ import sso.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class CredentialsHandlerTest {
+public class CredentialsValidationHandlerTest {
 
     private Mockery context;
     private Service service;
@@ -36,7 +36,7 @@ public class CredentialsHandlerTest {
             will(returnValue(false));
         }});
 
-        CredentialsHandler handler = new CredentialsHandler(service, gateway);
+        CredentialsValidationHandler handler = new CredentialsValidationHandler(service, gateway);
         Response response = handler.handleRequest(request);
 
         context.assertIsSatisfied();
@@ -52,7 +52,7 @@ public class CredentialsHandlerTest {
             never(service);
         }});
 
-        CredentialsHandler handler = new CredentialsHandler(service, gateway);
+        CredentialsValidationHandler handler = new CredentialsValidationHandler(service, gateway);
         Response response = handler.handleRequest(request);
 
         assertEquals("No credentials provided, please log in the application", response.getText());
@@ -70,7 +70,7 @@ public class CredentialsHandlerTest {
             oneOf(service).handleRequest(request);
         }});
 
-        CredentialsHandler handler = new CredentialsHandler(service, gateway);
+        CredentialsValidationHandler handler = new CredentialsValidationHandler(service, gateway);
         handler.handleRequest(request);
 
         context.assertIsSatisfied();
