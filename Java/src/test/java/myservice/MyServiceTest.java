@@ -28,7 +28,7 @@ public class MyServiceTest {
     public void invalidSSOTokenIsRejected() {
         SSOToken token = new SSOToken();
         context.checking(new Expectations() {{
-            ignoring(authenticationGateway);
+            never(authenticationGateway);
 
             oneOf(ssoRegistry).is_valid(token);
             will(returnValue(false));
@@ -44,7 +44,7 @@ public class MyServiceTest {
     @Test
     public void nullSSOTokenIsRejected() {
         context.checking(new Expectations() {{
-            ignoring(authenticationGateway);
+            never(authenticationGateway);
 
             oneOf(ssoRegistry).is_valid(null);
             will(returnValue(false));
@@ -61,7 +61,7 @@ public class MyServiceTest {
     public void validSSOTokenIsAccepted() {
         SSOToken token = new SSOToken();
         context.checking(new Expectations() {{
-            ignoring(authenticationGateway);
+            never(authenticationGateway);
 
             oneOf(ssoRegistry).is_valid(token);
             will(returnValue(true));
@@ -83,7 +83,7 @@ public class MyServiceTest {
         request.setCredentials(username, password);
 
         context.checking(new Expectations() {{
-            ignoring(ssoRegistry);
+            never(ssoRegistry);
 
             oneOf(authenticationGateway).credentialsAreValid(username, password);
             will(returnValue(false));
