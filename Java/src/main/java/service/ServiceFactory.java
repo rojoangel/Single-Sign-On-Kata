@@ -1,5 +1,6 @@
 package service;
 
+import handler.CredentialsToTokenHandler;
 import handler.CredentialsValidationHandler;
 import handler.SSOTokenHandler;
 import myservice.MyService;
@@ -13,9 +14,11 @@ public class ServiceFactory {
             SingleSignOnRegistry singleSignOnRegistry
     ) {
         return new CredentialsValidationHandler(
-                new SSOTokenHandler(
-                    new MyService(),
-                    singleSignOnRegistry),
+                new CredentialsToTokenHandler(
+                        new SSOTokenHandler(
+                                new MyService(),
+                                singleSignOnRegistry),
+                        singleSignOnRegistry),
                 authenticationGateway
         );
     }

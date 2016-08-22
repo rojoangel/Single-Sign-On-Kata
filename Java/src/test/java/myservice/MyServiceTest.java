@@ -110,4 +110,33 @@ public class MyServiceTest {
         context.assertIsSatisfied();
         assertNotEquals("hello Foo!", response.getText());
     }
+
+    @Test
+    public void validCredentialsAreAccepted() throws Exception {
+
+        String username = "validUsername";
+        String password = "validPassword";
+        Request request = new Request("Foo", null);
+        request.setCredentials(username, password);
+
+        SSOToken token = new SSOToken();
+
+        context.checking(new Expectations() {{
+            oneOf(authenticationGateway).credentialsAreValid(username, password);
+            will(returnValue(true));
+
+            oneOf(ssoRegistry).register_new_session(username, password);
+            will(returnValue(token));
+
+            oneOf(ssoRegistry).is_valid(token);
+            will(returnValue(true));
+        }});
+
+        Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
+        Response response = service.handleRequest(request);
+
+        context.assertIsSatisfied();
+        assertEquals("hello Foo!", response.getText());
+
+    }
 }
