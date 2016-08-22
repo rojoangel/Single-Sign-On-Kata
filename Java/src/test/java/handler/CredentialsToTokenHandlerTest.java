@@ -43,4 +43,22 @@ public class CredentialsToTokenHandlerTest {
 
         context.assertIsSatisfied();
     }
+
+    @Test
+    public void whenTokenIsPresentDelegatesToService() throws Exception {
+
+        Request request = new Request("World", new SSOToken());
+
+        context.checking(new Expectations() {{
+            never(registry);
+
+            oneOf(service).handleRequest(request);
+        }});
+
+        CredentialsToTokenHandler handler = new CredentialsToTokenHandler(service, registry);
+        handler.handleRequest(request);
+
+        context.assertIsSatisfied();
+    }
+
 }
