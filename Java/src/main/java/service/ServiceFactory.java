@@ -8,15 +8,6 @@ import sso.SingleSignOnRegistry;
 
 public class ServiceFactory {
 
-    public static Service handlingSSOToken(
-            SingleSignOnRegistry singleSignOnRegistry
-    ) {
-        return new SSOTokenHandler(
-                new MyService(),
-                singleSignOnRegistry
-        );
-    }
-
     public static Service handlingSSOTokenAndCredentials(
             AuthenticationGateway authenticationGateway,
             SingleSignOnRegistry singleSignOnRegistry
