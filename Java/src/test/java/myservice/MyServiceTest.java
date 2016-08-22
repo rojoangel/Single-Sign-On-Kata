@@ -97,4 +97,19 @@ public class MyServiceTest {
         assertNotEquals("hello Foo!", response.getText());
     }
 
+    @Test
+    public void nullCredentialsAreRejected() throws Exception {
+        Request request = new Request("Foo", null);
+
+        context.checking(new Expectations() {{
+            never(ssoRegistry);
+            never(authenticationGateway);
+        }});
+
+        Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
+        Response response = service.handleRequest(request);
+
+        context.assertIsSatisfied();
+        assertNotEquals("hello Foo!", response.getText());
+    }
 }
