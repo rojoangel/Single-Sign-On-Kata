@@ -4,8 +4,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import service.CredentialsRequest;
 import service.Service;
-import sso.Request;
 import sso.SSOToken;
 import sso.SingleSignOnRegistry;
 
@@ -26,7 +26,7 @@ public class CredentialsToTokenHandlerTest {
     public void convertsCredentialsToToken() throws Exception {
         String username = "userName";
         String password = "password";
-        Request request = new Request("World", null);
+        CredentialsRequest request = new CredentialsRequest("World", null);
         request.setCredentials(username, password);
 
         SSOToken token = new SSOToken();
@@ -35,7 +35,7 @@ public class CredentialsToTokenHandlerTest {
             oneOf(registry).register_new_session(username, password);
             will(returnValue(token));
 
-            oneOf(service).handleRequest(new Request(request.getName(), token));
+            oneOf(service).handleRequest(new CredentialsRequest(request.getName(), token));
         }});
 
         CredentialsToTokenHandler handler = new CredentialsToTokenHandler(service, registry);
@@ -47,7 +47,7 @@ public class CredentialsToTokenHandlerTest {
     @Test
     public void whenTokenIsPresentDelegatesToService() throws Exception {
 
-        Request request = new Request("World", new SSOToken());
+        CredentialsRequest request = new CredentialsRequest("World", new SSOToken());
 
         context.checking(new Expectations() {{
             never(registry);

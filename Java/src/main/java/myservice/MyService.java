@@ -1,13 +1,13 @@
 package myservice;
 
+import service.CredentialsRequest;
 import service.Service;
-import sso.Request;
 import sso.Response;
 
 public class MyService implements Service {
 
     @Override
-    public Response handleRequest(Request request) {
+    public Response handleRequest(CredentialsRequest request) {
         return new Response("hello " + request.getName() + "!");
     }
 }

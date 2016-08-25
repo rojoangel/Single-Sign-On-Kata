@@ -1,7 +1,7 @@
 package handler;
 
+import service.CredentialsRequest;
 import service.Service;
-import sso.Request;
 import sso.Response;
 import sso.SingleSignOnRegistry;
 
@@ -16,7 +16,7 @@ public class SSOTokenHandler implements Service {
     }
 
     @Override
-    public Response handleRequest(Request request) {
+    public Response handleRequest(CredentialsRequest request) {
         if (!registry.is_valid(request.getSSOToken())) {
             return new Response("Invalid Single Sign On Token Provided");
         }

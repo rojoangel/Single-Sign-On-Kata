@@ -4,13 +4,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import service.CredentialsRequest;
 import service.Service;
-import sso.Request;
 import sso.Response;
 import sso.SSOToken;
 import sso.SingleSignOnRegistry;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SSOTokenHandlerTest {
 
@@ -28,7 +28,7 @@ public class SSOTokenHandlerTest {
     @Test
     public void invalidSSOTokenIsRejected() throws Exception {
         SSOToken token = new SSOToken();
-        Request request = new Request("World", token);
+        CredentialsRequest request = new CredentialsRequest("World", token);
 
         context.checking(new Expectations() {{
             never(service);
@@ -47,7 +47,7 @@ public class SSOTokenHandlerTest {
     @Test
     public void validSSOTokenIsAccepted() throws Exception {
         SSOToken token = new SSOToken();
-        Request request = new Request("World", token);
+        CredentialsRequest request = new CredentialsRequest("World", token);
 
         context.checking(new Expectations() {{
             oneOf(service).handleRequest(request);

@@ -4,8 +4,11 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import service.CredentialsRequest;
 import service.Service;
-import sso.*;
+import sso.AuthenticationGateway;
+import sso.Response;
+import sso.SSOToken;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,7 +29,7 @@ public class CredentialsValidationHandlerTest {
     public void invalidCredentialsAreRejected() throws Exception {
         String username = "invalidUserName";
         String password = "invalidPassword";
-        Request request = new Request("World", null);
+        CredentialsRequest request = new CredentialsRequest("World", null);
         request.setCredentials(username, password);
 
         context.checking(new Expectations() {{
@@ -45,7 +48,7 @@ public class CredentialsValidationHandlerTest {
 
     @Test
     public void nullCredentialsAndTokenAreRejected() throws Exception {
-        Request request = new Request("World", null);
+        CredentialsRequest request = new CredentialsRequest("World", null);
 
         context.checking(new Expectations() {{
             never(gateway);
@@ -62,7 +65,7 @@ public class CredentialsValidationHandlerTest {
     @Test
     public void whenTokenIsPresentDelegatesToService() throws Exception {
 
-        Request request = new Request("World", new SSOToken());
+        CredentialsRequest request = new CredentialsRequest("World", new SSOToken());
 
         context.checking(new Expectations() {{
             never(gateway);

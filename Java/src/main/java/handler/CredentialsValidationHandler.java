@@ -1,7 +1,10 @@
 package handler;
 
+import service.CredentialsRequest;
 import service.Service;
-import sso.*;
+import sso.AuthenticationGateway;
+import sso.Credentials;
+import sso.Response;
 
 public class CredentialsValidationHandler implements Service{
 
@@ -17,7 +20,7 @@ public class CredentialsValidationHandler implements Service{
     }
 
     @Override
-    public Response handleRequest(Request request) {
+    public Response handleRequest(CredentialsRequest request) {
         if (request.getSSOToken() != null) {
             return this.service.handleRequest(request);
         }

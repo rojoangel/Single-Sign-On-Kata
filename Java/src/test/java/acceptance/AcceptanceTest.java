@@ -1,15 +1,19 @@
 package acceptance;
 
-import static org.junit.Assert.*;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-
+import service.CredentialsRequest;
 import service.Service;
 import service.ServiceFactory;
-import sso.*;
+import sso.AuthenticationGateway;
+import sso.Response;
+import sso.SSOToken;
+import sso.SingleSignOnRegistry;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class AcceptanceTest {
 
@@ -35,7 +39,7 @@ public class AcceptanceTest {
         }});
 
         Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
-        Response response = service.handleRequest(new Request("Foo", token));
+        Response response = service.handleRequest(new CredentialsRequest("Foo", token));
 
         context.assertIsSatisfied();
         assertNotEquals("hello Foo!", response.getText());
@@ -49,7 +53,7 @@ public class AcceptanceTest {
         }});
 
         Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
-        Response response = service.handleRequest(new Request("Foo", null));
+        Response response = service.handleRequest(new CredentialsRequest("Foo", null));
 
         context.assertIsSatisfied();
         assertNotEquals("hello Foo!", response.getText());
@@ -66,7 +70,7 @@ public class AcceptanceTest {
         }});
 
         Service service = ServiceFactory.handlingSSOTokenAndCredentials(authenticationGateway, ssoRegistry);
-        Response response = service.handleRequest(new Request("Foo", token));
+        Response response = service.handleRequest(new CredentialsRequest("Foo", token));
 
         context.assertIsSatisfied();
         assertEquals("hello Foo!", response.getText());
@@ -75,7 +79,7 @@ public class AcceptanceTest {
     @Test
     public void invalidCredentialsAreRejected() {
 
-        Request request = new Request("Foo", null);
+        CredentialsRequest request = new CredentialsRequest("Foo", null);
         String username = "invalidUserName";
         String password = "invalidPassword";
         request.setCredentials(username, password);
@@ -97,7 +101,7 @@ public class AcceptanceTest {
 
     @Test
     public void nullCredentialsAreRejected() throws Exception {
-        Request request = new Request("Foo", null);
+        CredentialsRequest request = new CredentialsRequest("Foo", null);
 
         context.checking(new Expectations() {{
             never(ssoRegistry);
@@ -116,7 +120,7 @@ public class AcceptanceTest {
 
         String username = "validUsername";
         String password = "validPassword";
-        Request request = new Request("Foo", null);
+        CredentialsRequest request = new CredentialsRequest("Foo", null);
         request.setCredentials(username, password);
 
         SSOToken token = new SSOToken();
